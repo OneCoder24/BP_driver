@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=BIN_PICKING
-Comment=SCAPE Bin-Picking GUI Controller
-Exec=/home/user/user-venv/launch_python.sh /home/user/store/home/actual_driver/driver_gui.py
-Icon=/home/user/store/home/actual_driver/icon.png
-Terminal=true
-Type=Application
-Categories=Development;Robotics;
-StartupNotify=true
