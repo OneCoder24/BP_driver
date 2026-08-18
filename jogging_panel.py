@@ -5,7 +5,10 @@ JoggingPanel — виджет ручного управления роботом
 import tkinter as tk
 from tkinter import ttk
 import logging
+import threading
 from typing import Optional, Callable
+
+from config import set_gripper_state
 
 logger = logging.getLogger("RoboProSCAPE.JoggingPanel")
 
@@ -100,6 +103,18 @@ class JoggingPanel(ttk.Frame):
         self.btn_free_drive = ttk.Button(control_frame, text="Свободный привод", 
                                          command=self._toggle_free_drive)
         self.btn_free_drive.pack(fill=tk.X, pady=2)
+
+        # Схват (зажать/отпустить)
+        grip_frame = ttk.LabelFrame(control_frame, text="Схват", padding=5)
+        grip_frame.pack(fill=tk.X, pady=5)
+
+        self.btn_grip_close = ttk.Button(grip_frame, text=" Зажать схват",
+                                         command=self._grip_close)
+        self.btn_grip_close.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 4))
+
+        self.btn_grip_open = ttk.Button(grip_frame, text=" Отпустить схват",
+                                        command=self._grip_open)
+        self.btn_grip_open.pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(4, 0))
         
         # Слайдер скорости
         speed_frame = ttk.Frame(control_frame)
@@ -298,6 +313,32 @@ class JoggingPanel(ttk.Frame):
                 self.btn_free_drive.config(text="Свободный привод")
                 return
         self.free_drive_after_id = self.after(self.JOG_INTERVAL_MS, self._free_drive_loop)
+
+    # ==========================================
+    # СХВАТ
+    # ==========================================
+    def _grip_close(self):
+        """Зажать схват (set_gripper_state(robot, True))."""
+        self._grip(True)
+
+    def _grip_open(self):
+        """Отпустить схват (set_gripper_state(robot, False))."""
+        self._grip(False)
+
+    def _grip(self, close: bool):
+        if not self.robot:
+            self._log("⚠️ Робот не подключён — схват недоступен.")
+            return
+        # Выполняем в отдельном потоке, чтобы не блокировать GUI на GRIPPER_WAIT_SEC
+        threading.Thread(target=self._grip_worker, args=(close,), daemon=True).start()
+
+    def _grip_worker(self, close: bool):
+        try:
+            set_gripper_state(self.robot, close)
+            self._log("🤏 Схват " + ("зажат" if close else "отпущен"))
+        except Exception as e:
+            logger.error(f"Gripper error: {e}")
+            self._log(f"❌ Ошибка схвата: {e}")
     
     # ==========================================
     # НАСТРОЙКИ
