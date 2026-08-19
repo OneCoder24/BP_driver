@@ -65,7 +65,7 @@ class RobotConfig:
     CALIBRATION_SPEED: float = 15.0
     CALIBRATION_ACCEL: float = 15.0
     CALIBRATION_BLEND: float = 0.0
-    GRIPPER_DO: int = 23
+    GRIPPER_DO: int = 7
     GRIPPER_WAIT_SEC: float = 0.3
     TIMEOUT_MOTION: float = 30.0
     SAFETY_CHECK_INTERVAL: float = 0.1

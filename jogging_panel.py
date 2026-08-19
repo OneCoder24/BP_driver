@@ -137,102 +137,38 @@ class JoggingPanel(ttk.Frame):
         self._log(f"🔗 JoggingPanel: robot connected")
     
     def _setup_styles(self):
-        """Настраивает единый набор стилей для стандартизированного вида."""
+        """Стили джойстика в цветовой гамме основного интерфейса (driver_gui)."""
         style = ttk.Style()
         self._style = style
 
         font_bold = ("Segoe UI", 10, "bold")
 
-        # --- Базовые кнопки джоггинга ---
-        style.configure("Jog.TButton",
-                        font=font_bold, padding=(14, 9),
-                        background="#E8EDF5", foreground="#1F2A44",
-                        bordercolor="#AFBCCE", lightcolor="#F7F9FC",
-                        darkcolor="#C6D2E2", focuscolor="#3B82F6", relief="flat")
-        style.map("Jog.TButton",
-                  background=[("disabled", "#E6EAF0"), ("pressed", "#C6D2E2"),
-                              ("active", "#D9E3F0")],
-                  foreground=[("disabled", "#9AA5B5")],
-                  bordercolor=[("disabled", "#C9D2DE"), ("active", "#93A5C0")])
+        # Джог-кнопки, сочленения и свободный привод — стандартные кнопки GUI
+        style.configure("Jog.TButton", font=font_bold, padding=(14, 9))
+        style.configure("Free.TButton", font=font_bold, padding=(14, 9))
 
-        # Минус — тёплый красноватый оттенок
-        style.configure("JogMinus.TButton",
-                        font=font_bold, padding=(14, 9),
-                        background="#FBE4DE", foreground="#8E3B24",
-                        bordercolor="#E8B0A0", lightcolor="#FDF2EF",
-                        darkcolor="#EBC0B2", focuscolor="#F97316", relief="flat")
-        style.map("JogMinus.TButton",
-                  background=[("pressed", "#F3C6B8"), ("active", "#F8D6CC")],
-                  bordercolor=[("active", "#E19A87")])
-
-        # Плюс — холодный зелёный оттенок
-        style.configure("JogPlus.TButton",
-                        font=font_bold, padding=(14, 9),
-                        background="#DFF2E3", foreground="#1E6B35",
-                        bordercolor="#A7D6B3", lightcolor="#F2FBF4",
-                        darkcolor="#B2DCBD", focuscolor="#22C55E", relief="flat")
-        style.map("JogPlus.TButton",
-                  background=[("pressed", "#C2E5CB"), ("active", "#CDEBd5")],
-                  bordercolor=[("active", "#8FC9A0")])
-
-        # Свободный привод — янтарный (вкл/выкл)
-        style.configure("Free.TButton",
-                        font=font_bold, padding=(14, 9),
-                        background="#FDF0C8", foreground="#8A5A00",
-                        bordercolor="#E7CD8C", lightcolor="#FFFBE8",
-                        darkcolor="#E8D6A4", focuscolor="#F59E0B", relief="flat")
-        style.map("Free.TButton",
-                  background=[("pressed", "#F3E2A8"), ("active", "#FBEBC0")])
-
+        # Свободный привод активен — оранжевый (цвет Pause из driver_gui)
         style.configure("FreeActive.TButton",
                         font=font_bold, padding=(14, 9),
-                        background="#F59E0B", foreground="#FFFFFF",
-                        bordercolor="#C77E05", lightcolor="#FCCA6B",
-                        darkcolor="#C07704", relief="flat")
-        style.map("FreeActive.TButton",
-                  background=[("pressed", "#D9850A"), ("active", "#F7A92E")])
+                        foreground="white", background="#FF9800")
+        style.map("FreeActive.TButton", background=[("active", "#F57C00")])
 
-        # Схват: Зажать — насыщенный зелёный, Отпустить — оранжевый
+        # Схват: Зажать — зелёный (Run), Отпустить — красный (Stop)
         style.configure("GripClose.TButton",
                         font=font_bold, padding=(14, 10),
-                        background="#1FA34B", foreground="#FFFFFF",
-                        bordercolor="#157C38", lightcolor="#5BCB7F",
-                        darkcolor="#157C38", relief="flat")
-        style.map("GripClose.TButton",
-                  background=[("pressed", "#16843C"), ("active", "#2BB55A")])
+                        foreground="white", background="#4CAF50")
+        style.map("GripClose.TButton", background=[("active", "#45a049")])
 
         style.configure("GripOpen.TButton",
                         font=font_bold, padding=(14, 10),
-                        background="#ED7B2E", foreground="#FFFFFF",
-                        bordercolor="#C25F18", lightcolor="#F5A367",
-                        darkcolor="#B85917", relief="flat")
-        style.map("GripOpen.TButton",
-                  background=[("pressed", "#D9681F"), ("active", "#F08A42")])
+                        foreground="white", background="#f44336")
+        style.map("GripOpen.TButton", background=[("active", "#d32f2f")])
 
-        # Захват позы — фиолетовый
-        style.configure("Teach.TButton",
-                        font=font_bold, padding=(14, 9),
-                        background="#7C3AED", foreground="#FFFFFF",
-                        bordercolor="#6329C5", lightcolor="#A78BFA",
-                        darkcolor="#5E26B8", relief="flat")
-        style.map("Teach.TButton",
-                  background=[("pressed", "#6A2ED0"), ("active", "#8B5CF6")])
+        # Захват позы — стандартная кнопка GUI
+        style.configure("Teach.TButton", font=font_bold, padding=(14, 9))
 
-        # LabelFrame — единая рамка с подписью
-        style.configure("Jog.TLabelframe",
-                        bordercolor="#AFBCCE", relief="flat")
-        style.configure("Jog.TLabelframe.Label",
-                        font=font_bold, foreground="#33415C")
-
-        # Combobox
-        style.configure("Jog.TCombobox",
-                        font=("Segoe UI", 10), fieldbackground="#FFFFFF",
-                        background="#E8EDF5", foreground="#1F2A44",
-                        arrowcolor="#33415C", bordercolor="#AFBCCE",
-                        lightcolor="#FFFFFF", darkcolor="#B9C4D4", padding=(6, 5))
-        style.map("Jog.TCombobox",
-                  fieldbackground=[("readonly", "#FFFFFF")],
-                  bordercolor=[("focus", "#3B82F6")])
+        # Списки — стандартный вид
+        style.configure("Jog.TCombobox", font=("Segoe UI", 10), padding=(6, 5))
     
     def _build_ui(self):
         main_frame = ttk.Frame(self)
@@ -256,7 +192,7 @@ class JoggingPanel(ttk.Frame):
             row = ttk.Frame(joint_frame)
             row.pack(fill=tk.X, pady=3)
 
-            btn_minus = ttk.Button(row, text="−", width=4, style="JogMinus.TButton")
+            btn_minus = ttk.Button(row, text="−", width=4, style="Jog.TButton")
             btn_minus.pack(side=tk.LEFT, padx=(0, 5), ipady=1)
             btn_minus.bind("<ButtonPress-1>", lambda e, idx=i: self._start_joint_jog(idx, "-"))
             btn_minus.bind("<ButtonRelease-1>", lambda e, idx=i: self._stop_joint_jog(idx))
@@ -266,7 +202,7 @@ class JoggingPanel(ttk.Frame):
                             font=("Segoe UI", 9), foreground="#243047")
             lbl.pack(side=tk.LEFT, expand=True)
 
-            btn_plus = ttk.Button(row, text="+", width=4, style="JogPlus.TButton")
+            btn_plus = ttk.Button(row, text="+", width=4, style="Jog.TButton")
             btn_plus.pack(side=tk.RIGHT, padx=(5, 0), ipady=1)
             btn_plus.bind("<ButtonPress-1>", lambda e, idx=i: self._start_joint_jog(idx, "+"))
             btn_plus.bind("<ButtonRelease-1>", lambda e, idx=i: self._stop_joint_jog(idx))
@@ -386,9 +322,8 @@ class JoggingPanel(ttk.Frame):
             grid_frame.rowconfigure(i, weight=1, uniform="jog3")
     
         def make_btn(text, row, col, axis, direction):
-            """Создаёт широкую цветную кнопку в ячейке сетки."""
-            style = "JogPlus.TButton" if direction == "+" else "JogMinus.TButton"
-            btn = ttk.Button(grid_frame, text=text, style=style)
+            """Создаёт широкую формальную кнопку в ячейке сетки."""
+            btn = ttk.Button(grid_frame, text=text, style="Jog.TButton")
             btn.grid(row=row, column=col, padx=3, pady=3, sticky="nsew")
             btn.bind("<ButtonPress-1>", lambda e, a=axis, d=direction: start_cb(a, d))
             btn.bind("<ButtonRelease-1>", lambda e, a=axis: stop_cb(a))
