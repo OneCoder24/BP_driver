@@ -92,7 +92,7 @@ class SpeedSlider(tk.Canvas):
         # Заливка текущего значения
         if fx > x0 + 4:
             self._round_rect(x0, y - t, fx, y + t, 12,
-                             fill="#4C8DF6", outline="")
+                             fill="#4CAF50", outline="")
         # Метки 0 / 100
         self.create_text(x0, h - 5, text="0", anchor="sw",
                          fill="#8A97AC", font=("Segoe UI", 7))
@@ -103,9 +103,9 @@ class SpeedSlider(tk.Canvas):
         r = t + self.THUMB_PAD
         fx = max(x0 + r, min(x1 - r, fx))
         self.create_oval(fx - r, y - r, fx + r, y + r,
-                         fill="#FFFFFF", outline="#2563EB", width=2)
+                         fill="#FFFFFF", outline="#4CAF50", width=2)
         self.create_oval(fx - 4, y - 4, fx + 4, y + 4,
-                         fill="#4C8DF6", outline="")
+                         fill="#4CAF50", outline="")
 
 
 class JoggingPanel(ttk.Frame):
